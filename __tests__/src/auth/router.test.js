@@ -26,6 +26,14 @@ afterAll(async (done) => {
 describe("Auth Router", () => {
   Object.keys(users).forEach((userType) => {
     describe(`${userType} users`, () => {
+      beforeAll(async (done) => {
+        await db.sync();
+        done();
+      });
+      afterAll(async (done) => {
+        await db.drop();
+        done();
+      });
       it("can create one", async (done) => {
         const response = await mockRequest
           .post("/signup")

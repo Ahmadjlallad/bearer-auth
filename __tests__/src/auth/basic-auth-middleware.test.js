@@ -7,17 +7,6 @@ let userInfo = {
   admin: { username: "admin", password: "password" },
 };
 
-// Pre-load our database with fake users
-beforeAll(async (done) => {
-  await db.sync();
-  await users.create(userInfo.admin);
-  done();
-});
-afterAll(async (done) => {
-  await db.drop();
-  done();
-});
-
 describe("Auth Middleware", () => {
   // admin:password: YWRtaW46cGFzc3dvcmQ=
   // admin:foo: YWRtaW46Zm9v
@@ -32,14 +21,28 @@ describe("Auth Middleware", () => {
 
   describe("user authentication", () => {
     it("fails a login for a user (admin) with the incorrect basic credentials", () => {
+      beforeAll(async (done) => {
+        await db.sync();
+        await users.create(userInfo.admin);
+        done();
+      });
+      afterAll(async (done) => {
+        await db.drop();
+        done();
+      });
       // Change the request to match this test case
       req.headers = {
         authorization: "Basic YWRtaW46Zm9v",
       };
 
       return middleware(req, res, next).then(() => {
+        console.log(
+          "---------------------------------------------------------------------------------------"
+        );
+        console.log(res.status);
         expect(next).not.toHaveBeenCalled();
-        expect(res.status).toHaveBeenCalledWith(403);
+        expect(res.status.mock.calls.flat(5)).toHaveBeenCalledWith(403);
+        console.log(res.status.mock.calls);
       });
     }); // it()
 

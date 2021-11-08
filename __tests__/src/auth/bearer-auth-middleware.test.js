@@ -10,18 +10,16 @@ let userInfo = {
   admin: { username: "admin", password: "password" },
 };
 
-// Pre-load our database with fake users
-beforeAll(async (done) => {
-  await db.sync();
-  await users.create(userInfo.admin);
-  done();
-});
-afterAll(async (done) => {
-  await db.drop();
-  done();
-});
-
 describe("Auth Middleware", () => {
+  beforeAll(async (done) => {
+    await db.sync();
+    await users.create(userInfo.admin);
+    done();
+  });
+  afterAll(async (done) => {
+    await db.drop();
+    done();
+  });
   // Mock the express req/res/next that we need for each middleware call
   const req = {};
   const res = {
