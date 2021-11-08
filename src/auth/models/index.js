@@ -10,9 +10,12 @@ const DATABASE_URL =
 const DATABASE_CONFIG =
   process.env.NODE_ENV === "production"
     ? {
+        dialect: "postgres",
         dialectOptions: {
-          ssl: true,
-          rejectUnauthorized: false,
+          ssl: {
+            require: true,
+            rejectUnauthorized: false,
+          },
         },
       }
     : {};
