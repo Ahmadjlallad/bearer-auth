@@ -7,7 +7,7 @@
     "start": "NODE_ENV=production node index.js",
     "init:config": "sequelize init:config",
     "db:create": "sequelize db:create",
-    "watch": "NODE_ENV=test nodemon index.js",
+    "watch": "nodemon index.js",
     "test-watch": "NODE_ENV=test jest --watchAll",
     "test": "NODE_ENV=test jest"
   },

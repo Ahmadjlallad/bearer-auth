@@ -10,7 +10,6 @@ const bearerAuth = require("./middleware/bearer.js");
 authRouter.post("/signup", async (req, res, next) => {
   try {
     let userRecord = await users.create(req.body);
-    console.log(userRecord);
     const output = {
       user: userRecord,
       token: userRecord.token,
