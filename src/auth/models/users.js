@@ -1,30 +1,7 @@
-# bearer-auth
+"use strict";
 
-bearer auth training (┬┬﹏┬┬)
-
-Links:
-
-- [basic-auth-heroku](https://jallad-bearer-auth.herokuapp.com/)
-- [readMe](https://github.com/Ahmadjlallad/bearer-auth#readme)
-- [latest PR](https://github.com/Ahmadjlallad/bearer-auth/pull/1)
-- [actions](https://github.com/Ahmadjlallad/bearer-auth/actions)
-
-- problem domain description
-  - As a user, I want to create a new account so that I may later login
-  - As a user, I want to login to my account so that I may access protected information
-  - As a user, I don't want to have to type my password every time I want to access protected information
-
-## Documentation
-
-![vi](./assets/7drawio.png)
-`/singin` url use to login basic 64 encoded credentials
-`/signup` url use to signup information in the bode
-hash using bcrypt to encrypt the password
-user can verify their email using jwt to generate a token
-
-## jsDoc
-
-```javascript
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 /**
  *
  * @param {sequelize} sequelize
@@ -75,7 +52,7 @@ const userSchema = (sequelize, DataTypes) => {
   // Basic AUTH: Validating strings (username, password)
   model.authenticateBasic = async function (username, password) {
     const user = await this.findOne({ where: { username } });
-    console.log(username, password, user);
+
     const valid = await bcrypt.compare(password, user.password);
 
     if (valid) {
@@ -106,50 +83,5 @@ const userSchema = (sequelize, DataTypes) => {
 
   return model;
 };
-const { users } = require("../models/index.js");
-/**
- *
- * @param {import("express").Request} req
- * @param {import("express").Response} res
- * @param {import("express").NextFunction} next
- * @returns {Promise<void>}
- * @description This function is used to check if the token is valid
- */
-module.exports = async (req, res, next) => {
-  try {
-    if (!req.headers.authorization) {
-      next("Invalid Login");
-    }
-    const token = req.headers.authorization.split(" ").pop();
-    const validUser = await users.authenticateToken(token);
-    req.user = validUser;
-    req.token = validUser.token;
-    next();
-  } catch (e) {
-    res.status(403).send("Invalid Login");
-  }
-};
 
-/**
- *
- * @param {Request} req
- * @param {Response} res
- * @param {import("express").NextFunction} next
- * @returns {Promise<void>}
- * @description Basic Auth Middleware for Express Router Middleware
- */
-module.exports = async (req, res, next) => {
-  if (!req.headers.authorization) {
-    return _authError();
-  }
-  req.headers.authorization = req.headers.authorization.split(" ").pop();
-  let basic = req.headers.authorization;
-  let [username, pass] = base64.decode(basic).split(":");
-  try {
-    req.user = await users.authenticateBasic(username, pass);
-    next();
-  } catch (e) {
-    res.status(403).send("Invalid Login ");
-  }
-};
-```
+module.exports = userSchema;
