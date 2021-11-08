@@ -1,7 +1,7 @@
 "use strict";
 
-const middleware = require("../../../src/auth/middleware/basic.js");
-const { db, users } = require("../../../src/auth/models/index.js");
+const middleware = require("../../../src/auth/middleware/basic");
+const { db, users } = require("../../../src/auth/models/index");
 
 let userInfo = {
   admin: { username: "admin", password: "password" },

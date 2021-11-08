@@ -2,8 +2,8 @@
 
 process.env.SECRET = "toes";
 
-const middleware = require("../../../src/auth/middleware/bearer.js");
-const { db, users } = require("../../../src/auth/models/index.js");
+const middleware = require("../../../src/auth/middleware/bearer");
+const { db, users } = require("../../../src/auth/models/index");
 const jwt = require("jsonwebtoken");
 
 let userInfo = {
